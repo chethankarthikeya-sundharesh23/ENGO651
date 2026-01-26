@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  font-family: "Arial, sans-serif";
+}
+
+.page-index {
+  background-image: url("fitness.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+.page-index .overlay {
+  margin-top: 0px;
+  width: 100%;
+  min-height: calc(100vh - 56px);
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.page-index .overlay h1 {
+  color: #ffffff;
+  font-family: "Arial, sans-serif";
+  font-size: 3rem;
+}
+.page-index .overlay p {
+  color: #ffffff;
+  font-size: 1.2rem;
+}
+
+.page-workout h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+.page-workout .row {
+  margin-top: 20px;
+}
+.page-workout .row .card {
+  margin-bottom: 1rem;
+}
+.page-workout .row .card h5 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffcc00;
+}
+.page-workout .row .card ul {
+  padding-left: 20px;
+}
+.page-workout .row .card ul li {
+  margin-bottom: 5px;
+}
+@media (max-width: 767px) {
+  .page-workout .card {
+    text-align: center;
+  }
+  .page-workout .card h5 {
+    font-size: 1.3rem;
+  }
+  .page-workout .card ul {
+    padding-left: 0;
+  }
+  .page-workout .card ul li {
+    display: inline-block;
+    margin: 0 10px 5px 10px;
+  }
+}
+
+#strength-head {
+  text-transform: uppercase;
+}
+
+#cardio-head {
+  text-transform: uppercase;
+}
+
+#yoga-head {
+  text-transform: uppercase;
+}
+
+.base-text, .special-text {
+  font-family: "Arial, sans-serif";
+  color: #ffffff;
+}
+
+.special-text {
+  font-weight: bold;
+}
+
+a:hover {
+  color: #ffcc00;
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=styles.css.map */

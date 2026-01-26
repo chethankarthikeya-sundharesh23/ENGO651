@@ -1,0 +1,126 @@
+// -------------------- Variables --------------------
+$overlay-color: rgba(0, 0, 0, 0.5);
+$white: #ffffff;
+$gold: #ffcc00;
+$heading-font: 'Arial, sans-serif';
+$text-font: 'Arial, sans-serif';
+
+// -------------------- Global styles --------------------
+body {
+  margin: 0;
+  font-family: $text-font;
+}
+
+// -------------------- Index Page --------------------
+.page-index {
+  background-image: url('fitness.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+
+  .overlay {
+    margin-top: 0px;
+    width: 100%;
+    min-height: calc(100vh - 56px);
+    background-color: $overlay-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+
+    h1 {
+      color: $white;
+      font-family: $heading-font;
+      font-size: 3rem;
+    }
+
+    p {
+      color: $white;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// -------------------- Workout Page --------------------
+.page-workout {
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+
+  .row {
+    margin-top: 20px;
+
+    .card {
+      margin-bottom: 1rem;
+
+      h5 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: $gold;
+      }
+
+      ul {
+        padding-left: 20px;
+
+        li {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  // Mobile responsiveness
+  @media (max-width: 767px) {
+    .card {
+      text-align: center;
+
+      h5 {
+        font-size: 1.3rem;
+      }
+
+      ul {
+        padding-left: 0;
+
+        li {
+          display: inline-block;
+          margin: 0 10px 5px 10px;
+        }
+      }
+    }
+  }
+}
+// -------------------- ID Selectors (Requirement) --------------------
+#strength-head {
+  text-transform: uppercase;
+}
+
+#cardio-head {
+  text-transform: uppercase;
+}
+
+#yoga-head {
+  text-transform: uppercase;
+}
+
+
+// -------------------- Example of SCSS Inheritance --------------------
+.base-text {
+  font-family: $text-font;
+  color: $white;
+}
+
+.special-text {
+  @extend .base-text;
+  font-weight: bold;
+}
+
+// -------------------- Pseudo-class Example --------------------
+a:hover {
+  color: $gold;
+  text-decoration: underline;
+}
