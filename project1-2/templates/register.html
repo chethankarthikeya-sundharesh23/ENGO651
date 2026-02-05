@@ -1,28 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
-    <h2>Register</h2>
+{% extends "layout.html" %}
 
-    <form method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <br><br>
+{% block title %}Register{% endblock %}
 
-        <input type="password" name="password" placeholder="Password" required>
-        <br><br>
+{% block content %}
+<h1>Welcome to Booksopedia</h1>
+<h2>Register</h2>
 
-        {% if error %}
-            <p style="color:red;">{{ error }}</p>
-        {% endif %}
+<form method="post">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="password" name="password" placeholder="Password" required>
 
-        <button type="submit">Register</button>
-    </form>
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
 
-    <p>
-        Already have an account?
-        <a href="{{ url_for('login') }}">Login here</a>
-    </p>
-</body>
-</html>
+    <button type="submit">Register</button>
+</form>
+
+<div class="link">
+    Already have an account?
+    <a href="{{ url_for('login') }}">Login here</a>
+</div>
+{% endblock %}

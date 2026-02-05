@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ book.title }}</title>
-</head>
-<body>
-    <p>You are logged in as <strong>{{ username }}</strong></p>
-    <a href="/logout">Logout</a>
-    <hr>
+{% extends "layout.html" %}
 
-    <h2>{{ book.title }}</h2>
+{% block title %}{{ book.title }}{% endblock %}
 
-    <ul>
-        <li><strong>Author:</strong> {{ book.author }}</li>
-        <li><strong>Year:</strong> {{ book.year }}</li>
-        <li><strong>ISBN:</strong> {{ book.isbn }}</li>
-    </ul>
+{% block content %}
 
-    <br>
-    <a href="/search">⬅ Back to search</a>
-</body>
-</html>
+<ul>
+    <li><strong>Title:</strong> {{ book.title }}</li>
+    <li><strong>Author:</strong> {{ book.author }}</li>
+    <li><strong>Year:</strong> {{ book.year }}</li>
+    <li><strong>ISBN:</strong> {{ book.isbn }}</li>
+</ul>
+
+<div class="link">
+    <a href="{{ url_for('search') }}">⬅ Back to search</a>
+</div>
+{% endblock %}
