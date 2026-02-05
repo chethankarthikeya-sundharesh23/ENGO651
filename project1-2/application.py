@@ -23,49 +23,116 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    if "user_id" in session:
-        return "You are logged in as {}".format(session["user_id"])
-    return redirect(url_for("login"))
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    return redirect(url_for("search"))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == "GET":
-        return render_template("register.html")
+    error = None
 
-    # POST request
-    username = request.form.get("username")
-    password = request.form.get("password")
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-    # Insert user into database
-    db.execute(
-        text("INSERT INTO users (username, password) VALUES (:u, :p)"),
-        {"u": username, "p": password}
-    )
-    db.commit()
+        existing_user = db.execute(
+            text("SELECT id FROM users WHERE username = :u"),
+            {"u": username}
+        ).fetchone()
 
-    return redirect(url_for("index"))
+        if existing_user:
+            error = "Username already exists"
+        else:
+            db.execute(
+                text("INSERT INTO users (username, password) VALUES (:u, :p)"),
+                {"u": username, "p": password}
+            )
+            db.commit()
+
+            user = db.execute(
+                text("SELECT id FROM users WHERE username = :u"),
+                {"u": username}
+            ).fetchone()
+
+            session["user_id"] = user.id
+            return redirect(url_for("index"))
+
+    return render_template("register.html", error=error)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "GET":
-        return render_template("login.html")
+    error = None
 
-    username = request.form.get("username")
-    password = request.form.get("password")
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-    user = db.execute(
-        text("SELECT id, password FROM users WHERE username = :u"),
-        {"u": username}
-    ).fetchone()
+        user = db.execute(
+            text("SELECT id, password FROM users WHERE username = :u"),
+            {"u": username}
+        ).fetchone()
 
-    if user is None or user.password != password:
-        return "Invalid username or password"
+        if user is None or user.password != password:
+            error = "Invalid username or password"
+        else:
+            session["user_id"] = user.id
+            return redirect(url_for("index"))
 
-    session["user_id"] = username
-    return redirect(url_for("index"))
+    return render_template("login.html", error=error)
 
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user = db.execute(
+        text("SELECT username FROM users WHERE id = :id"),
+        {"id": session["user_id"]}
+    ).fetchone()
+
+    if request.method == "GET":
+        return render_template("search.html", books=None, username=user.username)
+
+    query = request.form.get("query")
+
+    books = db.execute(
+        text("""
+            SELECT * FROM books
+            WHERE isbn ILIKE :q
+               OR title ILIKE :q
+               OR author ILIKE :q
+        """),
+        {"q": f"%{query}%"}
+    ).fetchall()
+
+    return render_template("search.html", books=books, username=user.username)
+
+@app.route("/book/<string:isbn>")
+def book(isbn):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    book = db.execute(
+        text("SELECT * FROM books WHERE isbn = :isbn"),
+        {"isbn": isbn}
+    ).fetchone()
+
+    if book is None:
+        return "Book not found", 404
+
+    user = db.execute(
+        text("SELECT username FROM users WHERE id = :id"),
+        {"id": session["user_id"]}
+    ).fetchone()
+
+    return render_template(
+        "book.html",
+        book=book,
+        username=user.username
+    )
 

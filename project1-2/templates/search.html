@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Books</title>
+</head>
+<body>
+    <p>You are logged in as <strong>{{ username }}</strong></p>
+    <a href="/logout">Logout</a>
+    <hr>
+    <h2>Search for a Book</h2>
+
+    <form action="/search" method="post">
+        <input type="text" name="query" placeholder="ISBN, title, or author" required>
+        <br><br>
+        <button type="submit">Search</button>
+    </form>
+
+    {% if books is not none %}
+        <h3>Results</h3>
+
+        {% if books|length == 0 %}
+            <p>No matching books found.</p>
+        {% else %}
+            <ul>
+                {% for book in books %}
+                    <li>
+                        <a href="/book/{{ book.isbn }}">
+                            {{ book.title }} by {{ book.author }} ({{ book.year }})
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

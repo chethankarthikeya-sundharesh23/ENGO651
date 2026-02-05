@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ book.title }}</title>
+</head>
+<body>
+    <p>You are logged in as <strong>{{ username }}</strong></p>
+    <a href="/logout">Logout</a>
+    <hr>
+
+    <h2>{{ book.title }}</h2>
+
+    <ul>
+        <li><strong>Author:</strong> {{ book.author }}</li>
+        <li><strong>Year:</strong> {{ book.year }}</li>
+        <li><strong>ISBN:</strong> {{ book.isbn }}</li>
+    </ul>
+
+    <br>
+    <a href="/search">⬅ Back to search</a>
+</body>
+</html>
