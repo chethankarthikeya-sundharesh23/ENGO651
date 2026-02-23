@@ -58,6 +58,24 @@
             font-size: 15px;
         }
 
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-size: 15px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+
         button {
             width: 100%;
             padding: 14px;
@@ -70,7 +88,18 @@
             font-weight: 600;
             cursor: pointer;
         }
-
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            text-align: center;
+        }
         .error {
             background: #fee2e2;
             color: #b91c1c;
@@ -78,6 +107,47 @@
             border-radius: 8px;
             margin-top: 15px;
             text-align: center;
+        }
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            font-size: 50px;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: color 0.2s;
+            margin-left: 20px;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            color: #fbbf24;
+            transform: scale(1.2);
+        }
+
+        .star-rating input:checked ~ label {
+            color: #f59e0b;
+        }
+        .review-card {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .review-stars {
+            color: #f59e0b;
+            font-size: 20px;
+            margin: 5px 0;
         }
 
         ul {
