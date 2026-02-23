@@ -14,4 +14,96 @@
 <div class="link">
     <a href="{{ url_for('search') }}">⬅ Back to search</a>
 </div>
+
+<hr>
+
+{% if not already_reviewed %}
+    <h3>Submit a Review</h3>
+
+    {% if success %}
+        <div class="success">{{ success }}</div>
+    {% endif %}
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <label>Rating:</label>
+
+        <div class="star-rating">
+            <input type="radio" name="rating" value="5" id="5"><label for="5">★</label>
+            <input type="radio" name="rating" value="4" id="4"><label for="4">★</label>
+            <input type="radio" name="rating" value="3" id="3"><label for="3">★</label>
+            <input type="radio" name="rating" value="2" id="2"><label for="2">★</label>
+            <input type="radio" name="rating" value="1" id="1" required><label for="1">★</label>
+        </div>
+
+        <br><br>
+
+        <label for="review">Your Review:</label><br>
+        <textarea name="review" rows="4" cols="50" required></textarea>
+
+        <br><br>
+
+        <button type="submit">Submit Review</button>
+    </form>
+{% else %}
+    <div class="success">
+        You have already reviewed this book.
+    </div>
+{% endif %}
+
+<hr>
+
+<h3>Google Books Rating</h3>
+
+{% if google_average %}
+    <p><strong>Average Rating:</strong> {{ google_average }} / 5</p>
+    <p><strong>Total Ratings:</strong> {{ google_count }}</p>
+{% else %}
+    <p>No Google rating available.</p>
+{% endif %}
+
+<hr>
+
+<h3>Book Description</h3>
+
+{% if google_description %}
+    <p>{{ google_description }}</p>
+{% else %}
+    <p>No description available.</p>
+{% endif %}
+
+<hr>
+
+<h3>Summarized Description (Gemini)</h3>
+
+{% if gemini_summary %}
+    <p>{{ gemini_summary }}</p>
+{% else %}
+    <p>No summary available.</p>
+{% endif %}
+
+
+<h3>User Reviews</h3>
+
+{% if reviews %}
+    {% for review in reviews %}
+        <div class="review-card">
+            <strong>{{ review.username }}</strong>
+
+            <div class="review-stars">
+                {% for i in range(review.rating) %}
+                    ★
+                {% endfor %}
+            </div>
+
+            <p>{{ review.comment }}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No reviews yet.</p>
+{% endif %}
+
 {% endblock %}
