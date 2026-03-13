@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#map {
+    height: 600px;
+    width: 90%;
+    margin: auto;
+    margin-top: 10px;
+    border: 2px solid gray;
+}
+
+.buttons {
+    margin-top: 10px;
+}
+
+button {
+    padding: 8px 15px;
+    margin: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
