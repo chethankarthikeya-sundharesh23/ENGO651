@@ -1,28 +1,29 @@
 // Initialize map
 var map = L.map('map').setView([51.0447, -114.0719], 12);
 
-// Add OpenStreetMap basemap
+// Basemap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'OpenStreetMap'
+    attribution:'OpenStreetMap'
 }).addTo(map);
 
-// Feature group for drawn items
+
+// Feature group
 var drawnItems = new L.FeatureGroup();
 map.addLayer(drawnItems);
 
 
-// Draw control
+// Draw controls
 var drawControl = new L.Control.Draw({
-    draw: {
-        polyline: true,
-        polygon: false,
-        rectangle: false,
-        circle: false,
-        marker: false,
-        circlemarker: false
+    draw:{
+        polyline:true,
+        polygon:false,
+        rectangle:false,
+        circle:false,
+        marker:false,
+        circlemarker:false
     },
-    edit: {
-        featureGroup: drawnItems
+    edit:{
+        featureGroup:drawnItems
     }
 });
 
@@ -30,66 +31,112 @@ map.addControl(drawControl);
 
 
 // Variables
-var drawnLine = null;
-var simplifiedLine = null;
+var drawnLine=null;
+var simplifiedLine=null;
 
 
-// When user draws a line
-map.on(L.Draw.Event.CREATED, function (event) {
+// When user draws
+map.on(L.Draw.Event.CREATED,function(event){
 
-    var layer = event.layer;
+    var layer=event.layer;
 
-    drawnLine = layer;
+    drawnLine=layer;
 
     drawnItems.addLayer(layer);
 
 });
 
 
-// Simplify button
-document.getElementById("simplifyBtn").onclick = function () {
+// ------------------
+// Custom Control UI
+// ------------------
 
-    if (!drawnLine) {
-        alert("Draw a polyline first!");
-        return;
-    }
+var control = L.control({position:'topleft'});
 
-    // Convert to GeoJSON
-    var geojson = drawnLine.toGeoJSON();
+control.onAdd=function(map){
 
-    // Simplify using Turf.js
-    var simplified = turf.simplify(geojson, {
-        tolerance: 0.01,
-        highQuality: true
-    });
+var div=L.DomUtil.create('div','custom-control');
 
-    // Remove old simplified line if it exists
-    if (simplifiedLine) {
-        map.removeLayer(simplifiedLine);
-    }
+div.innerHTML=
+'<button id="simplifyBtn">Simplify</button>'+
+'<button id="clearBtn">Clear</button>'+
+'<div class="stats">Original: <span id="originalPts">0</span></div>'+
+'<div class="stats">Simplified: <span id="simplifiedPts">0</span></div>';
 
-    // Add simplified line to map
-    simplifiedLine = L.geoJSON(simplified, {
-        style: {
-            color: "red",
-            weight: 4
-        }
-    }).addTo(map);
+return div;
 
 };
-// Clear button
-document.getElementById("clearBtn").onclick = function () {
 
-    // Remove original line
-    if (drawnLine) {
-        drawnItems.removeLayer(drawnLine);
-        drawnLine = null;
-    }
+control.addTo(map);
 
-    // Remove simplified line
-    if (simplifiedLine) {
-        map.removeLayer(simplifiedLine);
-        simplifiedLine = null;
-    }
 
-};
+// Prevent map dragging when clicking buttons
+document.addEventListener("DOMContentLoaded", function(){
+var controlDiv=document.querySelector('.custom-control');
+L.DomEvent.disableClickPropagation(controlDiv);
+});
+
+
+// Simplify function
+function simplifyLine(){
+
+if(!drawnLine){
+alert("Draw a polyline first!");
+return;
+}
+
+var geojson=drawnLine.toGeoJSON();
+
+var originalPoints=geojson.geometry.coordinates.length;
+
+var simplified=turf.simplify(geojson,{
+tolerance:0.01,
+highQuality:true
+});
+
+var simplifiedPoints=simplified.geometry.coordinates.length;
+
+document.getElementById("originalPts").textContent=originalPoints;
+document.getElementById("simplifiedPts").textContent=simplifiedPoints;
+
+
+if(simplifiedLine){
+map.removeLayer(simplifiedLine);
+}
+
+simplifiedLine=L.geoJSON(simplified,{
+style:{
+color:"red",
+weight:4
+}
+}).addTo(map);
+
+}
+
+
+// Clear function
+function clearMap(){
+
+if(drawnLine){
+drawnItems.removeLayer(drawnLine);
+drawnLine=null;
+}
+
+if(simplifiedLine){
+map.removeLayer(simplifiedLine);
+simplifiedLine=null;
+}
+
+document.getElementById("originalPts").textContent=0;
+document.getElementById("simplifiedPts").textContent=0;
+
+}
+
+
+// Wait for buttons to exist
+setTimeout(function(){
+
+document.getElementById("simplifyBtn").onclick=simplifyLine;
+document.getElementById("clearBtn").onclick=clearMap;
+
+},100);
