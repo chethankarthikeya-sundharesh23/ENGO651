@@ -77,3 +77,19 @@ document.getElementById("simplifyBtn").onclick = function () {
     }).addTo(map);
 
 };
+// Clear button
+document.getElementById("clearBtn").onclick = function () {
+
+    // Remove original line
+    if (drawnLine) {
+        drawnItems.removeLayer(drawnLine);
+        drawnLine = null;
+    }
+
+    // Remove simplified line
+    if (simplifiedLine) {
+        map.removeLayer(simplifiedLine);
+        simplifiedLine = null;
+    }
+
+};
